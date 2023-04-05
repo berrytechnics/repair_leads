@@ -12,7 +12,7 @@ export const index = async (req, res, next) => {
 export const view = async (req, res, next) => {
   try {
     const model = await Pricelist.find({ id: req.params.id });
-    res.render("pricelist/view", { model: model });
+    res.render("admin/pricelist/view", { model: model });
   } catch (err) {
     next(err);
   }
@@ -24,11 +24,9 @@ export const update = async (req, res, next) => {
       const model = await Pricelist.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
       });
-      res.render("admin/pricelist/view", model);
+      res.render("admin/pricelist/view", { model: model });
     }
-    const model = await Pricelist.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const model = await Pricelist.findById(req.params.id);
     res.render("admin/pricelist/update", { model: model });
   } catch (err) {
     next(err);
@@ -41,7 +39,7 @@ export const create = async (req, res, next) => {
       const model = await new Pricelist(req.body).save();
       res.redirect(`admin/pricelist/view/${model.id}`);
     }
-    res.render("admin/pricelist/create");
+    res.render("admin/pricelist/create", { model: [] });
   } catch (err) {
     next(err);
   }
