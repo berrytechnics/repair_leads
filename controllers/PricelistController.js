@@ -2,7 +2,7 @@ import Pricelist from "../models/PriceList.js";
 
 export const index = async (req, res, next) => {
   try {
-    const models = await Pricelist.find();
+    const models = await Pricelist.getRepairList();
     res.render("admin/pricelist/index", { models: models });
   } catch (err) {
     next(err);

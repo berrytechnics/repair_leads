@@ -1,7 +1,9 @@
 import express from "express";
+import * as Lead from '../controllers/LeadController.js';
 
 const router = express.Router();
 
-router.get('/', (req,res)=> res.send(200))
+router.all('/', (req,res)=> Lead.index );
+router.all('/create', Lead.create );
 
 export default router;
