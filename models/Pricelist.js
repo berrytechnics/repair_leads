@@ -57,9 +57,12 @@ Pricelist.getRepairList = async () => {
   const filteredModels = models.map((model) => {
     {
       const filteredRepairs = Object.keys(model.repairs);
-      filteredRepairs.forEach(
-        (repair, i) => (filteredRepairs[i] = Camelizer.decamelize(repair))
-      );
+      filteredRepairs.forEach((repair, i) => {
+        filteredRepairs[i] =
+          repair.toLowerCase() === "lcd"
+            ? Camelizer.decamelize(repair, true)
+            : Camelizer.decamelize(repair);
+      });
       return {
         repairs: filteredRepairs,
         type: model.type,

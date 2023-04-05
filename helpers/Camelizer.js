@@ -1,14 +1,14 @@
-export const camelize = (str) => {
+export const camelize = (str, noCaps = false) => {
   let string = str
     .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
       return index === 0 ? word.toLowerCase() : word.toUpperCase();
     })
     .replace(/\s+/g, "");
+  if (noCaps) string = string.toLowerCase();
   return string.charAt(0).toLowerCase() + string.slice(1);
 };
-export const decamelize = (str) => {
+export const decamelize = (str, allCaps = false) => {
   str = String(str);
-  console.log(str)
   let newStr = str.split("");
   let capIndex = 0;
   for (let i = 0; i < str.length; i++) {
@@ -19,5 +19,7 @@ export const decamelize = (str) => {
   newStr[capIndex] = newStr[capIndex].toLowerCase();
   newStr[0] = newStr[0].toUpperCase();
   newStr.splice(capIndex, 0, " ");
-  return newStr.reduce((a, b) => a + b);
+  newStr = newStr.reduce((a, b) => a + b);
+  if (allCaps) newStr = newStr.toUpperCase();
+  return newStr;
 };
