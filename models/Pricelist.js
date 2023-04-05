@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import * as Camelizer from "../helpers/Camelizer.js";
 
 const Pricelist = mongoose.model(
   "Pricelist",
@@ -55,15 +56,18 @@ Pricelist.getRepairList = async () => {
   const models = await Pricelist.find();
   const filteredModels = models.map((model) => {
     {
+      const filteredRepairs = Object.keys(model.repairs);
+      filteredRepairs.forEach(
+        (repair, i) => (filteredRepairs[i] = Camelizer.decamelize(repair))
+      );
       return {
-        repairs: Object.keys(model.repairs),
+        repairs: filteredRepairs,
         type: model.type,
         make: model.make,
         model: model.model,
       };
     }
   });
-
   return JSON.stringify(filteredModels);
 };
 
