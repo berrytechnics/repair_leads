@@ -1,3 +1,15 @@
+/**
+ * Returns str as one camelized word.
+ * @param {string} str 
+ * @param {boolean} noCaps 
+ * @returns string
+ * @example 
+ * // returns "helloWorld"
+ * camelize("Hello World")
+ * @example
+ * // returns "helloworld"
+ * camelize("Hello World", true)
+ */
 export const camelize = (str, noCaps = false) => {
   let string = str
     .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
@@ -7,6 +19,19 @@ export const camelize = (str, noCaps = false) => {
   if (noCaps) string = string.toLowerCase();
   return string.charAt(0).toLowerCase() + string.slice(1);
 };
+
+/**
+ * Returns str as spaced words, the first of which is capitalized (see example).
+ * @param {string} str 
+ * @param {boolean} noCaps 
+ * @returns string
+ * @example 
+ * // returns "Hello world"
+ * decamelize("helloWorld")
+ * @example 
+ * // returns "HELLO WORLD"
+ * decamelize("helloWorld")
+ */
 export const decamelize = (str, allCaps = false) => {
   str = String(str);
   let newStr = str.split("");
