@@ -72,3 +72,19 @@ export const makes = async (req, res, next) => {
     next(err);
   }
 };
+
+export const models = async (req, res, next) => {
+  try {
+    res.send(await Pricelist.getModels(req.params.make));
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const repairs = async (req, res, next) => {
+  try {
+    res.send(await Pricelist.getRepairs(req.params.model));
+  } catch (err) {
+    next(err);
+  }
+};

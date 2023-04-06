@@ -3,12 +3,12 @@
     <div class="row group-1 collapse show" id="card-1">
         <div class="col">
             <div class="card m-2">
-                <div class="card-header">Select a Device Type</div>
+                <div class="card-header text-white bg-danger">Select a Device Type</div>
                 <div class="card-body">
                     <div class="row">
                         <%  types.forEach( type => { %>
                                 <div class="col-3 mt-2">
-                                    <button data-bs-toggle="collapse" data-bs-target=".group-1" class="btn btn-outline-danger btn-type d-block mx-auto w-100 h-100"><%= type.replace("\n", "") %></a>
+                                    <button data-bs-toggle="collapse" data-bs-target=".group-1" class="btn btn-outline-danger btn-type d-block mx-auto w-100 h-100"><%= type %></a>
                                 </div>
                         <% }) %>
                         
@@ -20,7 +20,7 @@
     <div class="row group-1 group-2 collapse" id="card-2">
         <div class="col">
             <div class="card">
-                <div class="card-header">Select a Device Manufacturer</div>
+                <div class="card-header text-white bg-danger">Select a Device Manufacturer</div>
                 <div class="row card-body card-2-body">
                 </div>
             </div>
@@ -29,9 +29,8 @@
     <div class="row group-2 group-3 collapse" id="card-3">
         <div class="col">
             <div class="card">
-                <div class="card-header">Select a Device Model</div>
-                <div class="card-body">
-                    <button data-bs-toggle="collapse" data-bs-target=".group-3" class="btn btn-success">Next</a>
+                <div class="card-header text-white bg-danger">Select a Device Model</div>
+                <div class="row card-body card-3-body">
                 </div>
             </div>
         </div>
@@ -39,9 +38,8 @@
     <div class="row group-3 group-4 collapse" id="card-4">
         <div class="col">
             <div class="card">
-                <div class="card-header">Pick a thing</div>
-                <div class="card-body">
-                    <button data-bs-toggle="collapse" data-bs-target=".group-4" class="btn btn-success">Next</a>
+                <div class="card-header text-white bg-danger">Select a Device Repair</div>
+                <div class="row card-body card-4-body">
                 </div>
             </div>
         </div>
@@ -49,19 +47,52 @@
     <div class="row group-4 group-5 collapse" id="card-5">
         <div class="col">
             <div class="card">
-                <div class="card-header">Pick a thing</div>
-                <div class="card-body">
-                    <button data-bs-toggle="collapse" data-bs-target=".group-5" class="btn btn-success">Next</a>
-                </div>
+                <div class="card-header text-white bg-danger">Tell us where to send the Quote</div>
+                <form>
+                    <div class="card-body card-5-body">
+                        <label for="repair-group">Your Repair</label>
+                        <div class="form-group row" id="repair-group">   
+                            <input type="hidden" readonly name="type" id="typeField" class="form-control text-center" placeholder="Type">                                         
+                            <!-- <div class="col p-0 m-1"> <input type="text" readonly name="type" id="typeField" class="form-control text-center" placeholder="Type"> </div> -->
+                            <div class="col p-0 m-1"> <input type="text" readonly name="make" id="makeField" class="form-control text-center" placeholder="Make"> </div>
+                            <div class="col p-0 m-1"> <input type="text" readonly name="model" id="modelField" class="form-control text-center" placeholder="Model"> </div>
+                            <div class="col p-0 m-1"> <input type="text" readonly name="repair" id="repairField" class="form-control text-center" placeholder="Repair"> </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col">
+                                <label for="firstname">First Name</label>
+                                <input type="text" name="firstname" id="firstNameField" class="form-control">
+                            </div>
+                            <div class="col">
+                                <label for="lastname">Last Name</label>
+                                <input type="text" name="lastname" id="lastNameField" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" name="phone" id="phoneField" class="form-control">
+                            </div>
+                            <div class="col">
+                                <label for="email">Email Address</label>
+                                <input type="email" name="email" id="emailField" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row mt-3 text-end">
+                            <div class="col">    
+                                <input type="submit" class="btn btn-danger text-end">
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
     <div class="row group-5 collapse" id="card-6">
         <div class="col">
             <div class="card">
-                <div class="card-header">Pick a thing</div>
-                <div class="card-body">
-                    <p>DONE!</p>
+                <div class="card-header text-white bg-danger response-header"></div>
+                <div class="row card-body card-response">
                 </div>
             </div>
         </div>
@@ -71,16 +102,60 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
 <script>
+
+    const formData = {};
+
     $('.btn-type').click( e => {
+        formData.type = e.target.innerText;
         fetch(`/makes/${e.target.innerText}`).then(res=>res.json()).then(makes=>{
             makes.forEach(make=>{
                 $('.card-2-body').append(`
                     <div class="col-3 mt-2">
-                        <button data-bs-toggle="collapse" data-bs-target=".group-2" class="btn btn-outline-danger btn-type d-block mx-auto w-100 h-100">${make.replace("\n", "")}</a>
+                        <button onclick="getModels(event)" data-bs-toggle="collapse" data-bs-target=".group-2" class="btn btn-outline-danger btn-make d-block mx-auto w-100 h-100">${make}</a>
                     </div>
                 `)
             })
         })
+    });
+
+    $('form').submit( e => {
+        e.preventDefault();
+        e.stopPropagation();
+        window.location.reload();
     })
+
+    function getModels(e) {
+        formData.make = e.target.innerText;
+        fetch(`/models/${e.target.innerText}`).then(res=>res.json()).then(models=>{
+            models.forEach(model=>{
+                $('.card-3-body').append(`
+                    <div class="col-3 mt-2">
+                        <button onclick="getRepairs(event)" data-bs-toggle="collapse" data-bs-target=".group-3" class="btn btn-outline-danger btn-model d-block mx-auto w-100 h-100">${model}</a>
+                    </div>
+                `)
+            })
+        })
+    }
+
+    function getRepairs(e) {
+        formData.model = e.target.innerText;
+        fetch(`/repairs/${e.target.innerText}`).then(res=>res.json()).then(repairs=>{
+            repairs.forEach(repair=>{
+                $('.card-4-body').append(`
+                    <div class="col-3 mt-2">
+                        <button onclick="getContact(event)" data-bs-toggle="collapse" data-bs-target=".group-4" class="btn btn-outline-danger btn-repair d-block mx-auto w-100 h-100">${repair}</a>
+                    </div>
+                `)
+            })
+        })
+    }
+
+    function getContact(e) {
+        formData.repair = e.target.innerText;
+        $('#typeField').val(formData.type)
+        $('#makeField').val(formData.make)
+        $('#modelField').val(formData.model)
+        $('#repairField').val(formData.repair)
+    }
 
 </script>
