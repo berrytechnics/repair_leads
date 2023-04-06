@@ -8,15 +8,17 @@ import Pricelist from "../models/PriceList.js";
  */
 export const index = async (req, res, next) => {
   if (req.method === "POST") {
-    return {
+    res.json({
       status: 1,
       message: "Email not yet setup",
-    };
-  }
-  try {
-    const types = await Pricelist.getTypes();
-    res.render("lead/widget", { types });
-  } catch (err) {
-    next(err);
+      originalBody: req.body
+    });
+  } else {
+    try {
+      const types = await Pricelist.getTypes();
+      res.render("lead/widget", { types });
+    } catch (err) {
+      next(err);
+    }
   }
 };

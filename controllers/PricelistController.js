@@ -57,6 +57,13 @@ export const create = async (req, res, next) => {
   }
 };
 
+/**
+ * Returns data for widget.
+ * @param {obj} req 
+ * @param {obj} res 
+ * @param {obj} next 
+ * @returns {obj} JSON object
+ */
 export const types = async (req, res, next) => {
   try {
     res.send(await Pricelist.getTypes());
@@ -65,6 +72,13 @@ export const types = async (req, res, next) => {
   }
 };
 
+/**
+ * Returns data for widget.
+ * @param {obj} req 
+ * @param {obj} res 
+ * @param {obj} next 
+ * @returns {obj} JSON object
+ */
 export const makes = async (req, res, next) => {
   try {
     res.send(await Pricelist.getMakes(req.params.type));
@@ -73,6 +87,13 @@ export const makes = async (req, res, next) => {
   }
 };
 
+/**
+ * Returns data for widget.
+ * @param {obj} req 
+ * @param {obj} res 
+ * @param {obj} next 
+ * @returns {obj} JSON object
+ */
 export const models = async (req, res, next) => {
   try {
     res.send(await Pricelist.getModels(req.params.make));
@@ -81,6 +102,13 @@ export const models = async (req, res, next) => {
   }
 };
 
+/**
+ * Returns data for widget.
+ * @param {obj} req 
+ * @param {obj} res 
+ * @param {obj} next 
+ * @returns {obj} JSON object
+ */
 export const repairs = async (req, res, next) => {
   try {
     res.send(await Pricelist.getRepairs(req.params.model));

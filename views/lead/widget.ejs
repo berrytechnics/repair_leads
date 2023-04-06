@@ -59,14 +59,14 @@
         <div class="col">
             <div class="card">
                 <div class="card-header text-white bg-danger">Tell us where to send the Quote</div>
-                <form>
+                <form id="form">
                     <div class="card-body card-5-body">
                         <label for="repair-group">Your Repair</label>
                         <div class="form-group row" id="repair-group">   
                             <input type="hidden" readonly name="type" id="typeField" class="form-control text-center" placeholder="Type">                                         
-                            <div class="col p-0 m-1"> <input type="text" readonly name="make" id="makeField" class="form-control text-center" placeholder="Make"> </div>
-                            <div class="col p-0 m-1"> <input type="text" readonly name="model" id="modelField" class="form-control text-center" placeholder="Model"> </div>
-                            <div class="col p-0 m-1"> <input type="text" readonly name="repair" id="repairField" class="form-control text-center" placeholder="Repair"> </div>
+                            <input type="hidden" readonly name="make" id="makeField" class="form-control text-center" placeholder="Make"> 
+                            <input type="hidden" readonly name="model" id="modelField" class="form-control text-center" placeholder="Model"> 
+                            <input type="hidden" readonly name="repair" id="repairField" class="form-control text-center" placeholder="Repair"> 
                         </div>
                         <div class="row mt-3">
                             <div class="col">
@@ -101,8 +101,8 @@
     <div class="row group-5 collapse" id="card-6">
         <div class="col">
             <div class="card">
-                <div class="card-header text-white bg-danger response-header"></div>
-                <div class="row card-body card-response">
+                <div class="card-header text-white bg-danger response-header">&nbsp;</div>
+                <div class="row card-body card-6-body">
                     <div class="progress">
                         <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger w-100" role="progressbar"></div>
                     </div>
@@ -119,19 +119,31 @@
     const formData = {};
 
     // Submit Quote
-    $('form').submit( async (e) => {
+    $('#form').submit(  (e) => {
         e.preventDefault();
         e.stopPropagation();
-        window.location.reload();
-        const rawResponse = await fetch('/', {
+        formData.firstname = $('#firstNameField').val();
+        formData.lastname = $('#lastNameField').val();
+        formData.phone = $('#phoneField').val();
+        formData.email = $('#emailField').val();
+        fetch('/', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(formData)
-        });
-        const response = await rawResponse.json()
+        }).then( res=> res.json() ).then( res => {
+            if(res.status) {
+                new bootstrap.Collapse($('#card-5'));
+                $('.card-6-body').html(`
+                    <h1 class="text-center">Thank you for your request.</h1>
+                `)
+                $('#card-6').show();
+            } else {
+
+            }
+        })
     });
 
     // Get Makes
