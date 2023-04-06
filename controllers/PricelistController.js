@@ -1,5 +1,8 @@
 import Pricelist from "../models/PriceList.js";
 
+/** ### /admin/pricelist 
+ * Render list of all Pricelist devices. 
+ */
 export const index = async (req, res, next) => {
   try {
     const models = await Pricelist.find();
@@ -9,6 +12,9 @@ export const index = async (req, res, next) => {
   }
 };
 
+/** ### /admin/pricelist/view/:id  
+ * Render single Pricelist device view. 
+ */
 export const view = async (req, res, next) => {
   try {
     const model = await Pricelist.find({ id: req.params.id });
@@ -18,6 +24,9 @@ export const view = async (req, res, next) => {
   }
 };
 
+/** ### /admin/pricelist/update/:id 
+ * Render update form, or save form to DB and redirect to view.  
+ */
 export const update = async (req, res, next) => {
   try {
     if (req.method === "POST") {
@@ -33,6 +42,9 @@ export const update = async (req, res, next) => {
   }
 };
 
+/** ### /admin/pricelist/create 
+ *  Render create form, or create new DB entry and redirect to view. 
+ */
 export const create = async (req, res, next) => {
   try {
     if (req.method === "POST") {

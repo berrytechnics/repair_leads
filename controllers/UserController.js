@@ -1,5 +1,8 @@
 import User from "../models/User.js";
 
+/** ### /admin/login 
+ * Render login form, or log user in and redirect to dashboard. 
+ */
 export const login = async (req, res, next) => {
   if (req.method === "POST") {
     try {
@@ -11,6 +14,9 @@ export const login = async (req, res, next) => {
   res.render("admin/login", { model: [] });
 };
 
+/** ### /admin/register 
+ * Render registration form, or add user to DB and redirect to login. 
+ */
 export const register = async (req, res, next) => {
   if (req.method === "POST") {
     try {
@@ -29,6 +35,9 @@ export const register = async (req, res, next) => {
   res.render("admin/register", { model: [] });
 };
 
+/** ### /admin/dashboard 
+ * Render admin dashboard. 
+ */
 export const dashboard = async (req, res, next) => {
   try {
     res.render("admin/dashboard", { data: [] });

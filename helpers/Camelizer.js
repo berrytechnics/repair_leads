@@ -1,8 +1,7 @@
 /**
- * Returns str as one camelized word.
- * @param {string} str 
- * @param {boolean} noCaps 
- * @returns string
+ * ### Returns str as one camelized word. (See example)
+ * @param {string} str string to camelize
+ * @param {boolean} noCaps return string without any uppercase letters 
  * @example 
  * // returns "helloWorld"
  * camelize("Hello World")
@@ -21,10 +20,9 @@ export const camelize = (str, noCaps = false) => {
 };
 
 /**
- * Returns str as spaced words, the first of which is capitalized (see example).
- * @param {string} str 
- * @param {boolean} noCaps 
- * @returns string
+ * ### Returns str as spaced words, the first of which is capitalized (see example).
+ * @param {string} str string to decamelize
+ * @param {boolean} allCaps return without any lowercase letters 
  * @example 
  * // returns "Hello world"
  * decamelize("helloWorld")

@@ -52,7 +52,11 @@ const Pricelist = mongoose.model(
   })
 );
 
-Pricelist.getRepairList = async () => {
+/**
+ * Get list of all devices and repairs without prices.
+ * @returns {object} JSON Object
+ */
+async function getRepairList () {
   const models = await Pricelist.find();
   const filteredModels = models.map((model) => {
     {
@@ -73,5 +77,6 @@ Pricelist.getRepairList = async () => {
   });
   return JSON.stringify(filteredModels);
 };
+Pricelist.getRepairList = getRepairList;
 
 export default Pricelist;

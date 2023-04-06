@@ -15,6 +15,9 @@ import adminRouter from "./routes/adminRouter.js";
 import leadRouter from "./routes/leadRouter.js";
 
 import User from "./models/User.js";
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 const fileName = fileURLToPath(import.meta.url);
 const dirName = path.dirname(fileName);
@@ -23,10 +26,6 @@ const app = express();
 mongoose.set("strictQuery", false);
 app.set("view engine", ejs.name);
 app.disable("x-powered-by");
-
-passport.use(User.createStrategy());
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
 
 app.use(cors());
 app.use(sslRedirect);

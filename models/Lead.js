@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const leadSchema = new mongoose.Schema({
 	name:String,
 	location:String,
