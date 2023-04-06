@@ -8,7 +8,9 @@
                     <div class="row">
                         <%  types.forEach( type => { %>
                                 <div class="col-3 mt-2">
-                                    <button data-bs-toggle="collapse" data-bs-target=".group-1" class="btn btn-outline-danger btn-type d-block mx-auto w-100 h-100"><%= type %></a>
+                                    <button data-bs-toggle="collapse" data-bs-target=".group-1" class="btn btn-outline-danger btn-type d-block mx-auto w-100">
+                                        <%= type %>
+                                    </button>
                                 </div>
                         <% }) %>
                         
@@ -22,6 +24,9 @@
             <div class="card">
                 <div class="card-header text-white bg-danger">Select a Device Manufacturer</div>
                 <div class="row card-body card-2-body">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger w-100" role="progressbar"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -31,6 +36,9 @@
             <div class="card">
                 <div class="card-header text-white bg-danger">Select a Device Model</div>
                 <div class="row card-body card-3-body">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger w-100" role="progressbar"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -40,6 +48,9 @@
             <div class="card">
                 <div class="card-header text-white bg-danger">Select a Device Repair</div>
                 <div class="row card-body card-4-body">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger w-100" role="progressbar"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -53,7 +64,6 @@
                         <label for="repair-group">Your Repair</label>
                         <div class="form-group row" id="repair-group">   
                             <input type="hidden" readonly name="type" id="typeField" class="form-control text-center" placeholder="Type">                                         
-                            <!-- <div class="col p-0 m-1"> <input type="text" readonly name="type" id="typeField" class="form-control text-center" placeholder="Type"> </div> -->
                             <div class="col p-0 m-1"> <input type="text" readonly name="make" id="makeField" class="form-control text-center" placeholder="Make"> </div>
                             <div class="col p-0 m-1"> <input type="text" readonly name="model" id="modelField" class="form-control text-center" placeholder="Model"> </div>
                             <div class="col p-0 m-1"> <input type="text" readonly name="repair" id="repairField" class="form-control text-center" placeholder="Repair"> </div>
@@ -93,6 +103,9 @@
             <div class="card">
                 <div class="card-header text-white bg-danger response-header"></div>
                 <div class="row card-body card-response">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger w-100" role="progressbar"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -105,9 +118,18 @@
 
     const formData = {};
 
+    // Submit Quote
+    $('form').submit( e => {
+        e.preventDefault();
+        e.stopPropagation();
+        window.location.reload();
+    })
+
+    // Get Makes
     $('.btn-type').click( e => {
         formData.type = e.target.innerText;
         fetch(`/makes/${e.target.innerText}`).then(res=>res.json()).then(makes=>{
+            $('.card-2-body').html('')
             makes.forEach(make=>{
                 $('.card-2-body').append(`
                     <div class="col-3 mt-2">
@@ -118,15 +140,11 @@
         })
     });
 
-    $('form').submit( e => {
-        e.preventDefault();
-        e.stopPropagation();
-        window.location.reload();
-    })
-
+    // Get Models
     function getModels(e) {
         formData.make = e.target.innerText;
         fetch(`/models/${e.target.innerText}`).then(res=>res.json()).then(models=>{
+            $('.card-3-body').html('')
             models.forEach(model=>{
                 $('.card-3-body').append(`
                     <div class="col-3 mt-2">
@@ -137,9 +155,11 @@
         })
     }
 
+    // Get Repairs
     function getRepairs(e) {
         formData.model = e.target.innerText;
         fetch(`/repairs/${e.target.innerText}`).then(res=>res.json()).then(repairs=>{
+            $('.card-4-body').html('')
             repairs.forEach(repair=>{
                 $('.card-4-body').append(`
                     <div class="col-3 mt-2">
