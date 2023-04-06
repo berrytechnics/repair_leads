@@ -134,10 +134,10 @@
             },
             body: JSON.stringify(formData)
         })
-        .then( res=> res.json() )
+        .then( res => res.json() )
         .then( res => {
             $('.card-6-body').html(`
-            <h1 class="text-center text-${res.success || 'danger'}">${res.message}</h1>
+                <h1 class="text-center text-${res.success || 'danger'}">${res.message}</h1>
             `)
             new bootstrap.Collapse($('#card-5'));
             $('#card-6').show();
@@ -148,7 +148,7 @@
     function getMakes(e) {
         formData.type = e.target.innerText;
         fetch(`/makes/${e.target.innerText}`).then(res=>res.json()).then(makes=>{
-            $('.card-2-body').html('')
+            $('.card-2-body').html('');
             makes.forEach(make=>{
                 $('.card-2-body').append(`
                     <div class="col-3 mt-2">
@@ -163,7 +163,7 @@
     function getModels(e) {
         formData.make = e.target.innerText;
         fetch(`/models/${e.target.innerText}`).then(res=>res.json()).then(models=>{
-            $('.card-3-body').html('')
+            $('.card-3-body').html('');
             models.forEach(model=>{
                 $('.card-3-body').append(`
                     <div class="col-3 mt-2">
@@ -178,7 +178,7 @@
     function getRepairs(e) {
         formData.model = e.target.innerText;
         fetch(`/repairs/${e.target.innerText}`).then(res=>res.json()).then(repairs=>{
-            $('.card-4-body').html('')
+            $('.card-4-body').html('');
             repairs.forEach(repair=>{
                 $('.card-4-body').append(`
                     <div class="col-3 mt-2">
@@ -192,10 +192,10 @@
     // Show Contact Card
     function getContact(e) {
         formData.repair = e.target.innerText;
-        $('#typeField').val(formData.type)
-        $('#makeField').val(formData.make)
-        $('#modelField').val(formData.model)
-        $('#repairField').val(formData.repair)
+        $('#typeField').val(formData.type);
+        $('#makeField').val(formData.make);
+        $('#modelField').val(formData.model);
+        $('#repairField').val(formData.repair);
     };
 
 </script>
