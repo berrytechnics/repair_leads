@@ -4,13 +4,13 @@ import Pricelist from "../models/PriceList.js";
 /**
  * ### /index
  * Render leads widget form, or save new lead to DB ,email quote to customer and return status.
- * @returns {object|View}
+ * @returns {JSON|View}
  */
 export const index = async (req, res, next) => {
   if (req.method === "POST") {
     res.json({
-      status: 1,
-      message: "Email not yet setup",
+      success: 'success',
+      message: "Thank you for your request.",
       originalBody: req.body
     });
   } else {
