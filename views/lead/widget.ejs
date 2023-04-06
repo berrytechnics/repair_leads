@@ -8,7 +8,7 @@
                     <div class="row">
                         <%  types.forEach( type => { %>
                                 <div class="col-3 mt-2">
-                                    <button data-bs-toggle="collapse" data-bs-target=".group-1" class="btn btn-outline-danger btn-type d-block mx-auto w-100">
+                                    <button onclick="getMakes(event)" data-bs-toggle="collapse" data-bs-target=".group-1" class="btn btn-outline-danger btn-type d-block mx-auto w-100">
                                         <%= type %>
                                     </button>
                                 </div>
@@ -119,26 +119,35 @@
     const formData = {};
 
     // Submit Quote
-    $('form').submit( e => {
+    $('form').submit( async (e) => {
         e.preventDefault();
         e.stopPropagation();
         window.location.reload();
-    })
+        const rawResponse = await fetch('/', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+        const response = await rawResponse.json()
+    });
 
     // Get Makes
-    $('.btn-type').click( e => {
+    function getMakes(e) {
         formData.type = e.target.innerText;
         fetch(`/makes/${e.target.innerText}`).then(res=>res.json()).then(makes=>{
             $('.card-2-body').html('')
             makes.forEach(make=>{
                 $('.card-2-body').append(`
                     <div class="col-3 mt-2">
-                        <button onclick="getModels(event)" data-bs-toggle="collapse" data-bs-target=".group-2" class="btn btn-outline-danger btn-make d-block mx-auto w-100 h-100">${make}</a>
+                        <button onclick="getModels(event)" data-bs-toggle="collapse" data-bs-target=".group-2" class="btn btn-outline-danger btn-make d-block mx-auto w-100 h-100">${make}</button>
                     </div>
                 `)
             })
         })
-    });
+    };
 
     // Get Models
     function getModels(e) {
@@ -148,12 +157,12 @@
             models.forEach(model=>{
                 $('.card-3-body').append(`
                     <div class="col-3 mt-2">
-                        <button onclick="getRepairs(event)" data-bs-toggle="collapse" data-bs-target=".group-3" class="btn btn-outline-danger btn-model d-block mx-auto w-100 h-100">${model}</a>
+                        <button onclick="getRepairs(event)" data-bs-toggle="collapse" data-bs-target=".group-3" class="btn btn-outline-danger btn-model d-block mx-auto w-100 h-100">${model}</button>
                     </div>
                 `)
             })
         })
-    }
+    };
 
     // Get Repairs
     function getRepairs(e) {
@@ -163,19 +172,20 @@
             repairs.forEach(repair=>{
                 $('.card-4-body').append(`
                     <div class="col-3 mt-2">
-                        <button onclick="getContact(event)" data-bs-toggle="collapse" data-bs-target=".group-4" class="btn btn-outline-danger btn-repair d-block mx-auto w-100 h-100">${repair}</a>
+                        <button onclick="getContact(event)" data-bs-toggle="collapse" data-bs-target=".group-4" class="btn btn-outline-danger btn-repair d-block mx-auto w-100 h-100">${repair}</button>
                     </div>
                 `)
             })
         })
-    }
+    };
 
+    // Show Contact Card
     function getContact(e) {
         formData.repair = e.target.innerText;
         $('#typeField').val(formData.type)
         $('#makeField').val(formData.make)
         $('#modelField').val(formData.model)
         $('#repairField').val(formData.repair)
-    }
+    };
 
 </script>
