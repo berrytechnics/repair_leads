@@ -1,7 +1,7 @@
 import Pricelist from "../models/PriceList.js";
 
-/** ### /admin/pricelist 
- * Render list of all Pricelist devices. 
+/** ### /admin/pricelist
+ * Render list of all Pricelist devices.
  */
 export const index = async (req, res, next) => {
   try {
@@ -12,8 +12,8 @@ export const index = async (req, res, next) => {
   }
 };
 
-/** ### /admin/pricelist/view/:id  
- * Render single Pricelist device view. 
+/** ### /admin/pricelist/view/:id
+ * Render single Pricelist device view.
  */
 export const view = async (req, res, next) => {
   try {
@@ -24,8 +24,8 @@ export const view = async (req, res, next) => {
   }
 };
 
-/** ### /admin/pricelist/update/:id 
- * Render update form, or save form to DB and redirect to view.  
+/** ### /admin/pricelist/update/:id
+ * Render update form, or save form to DB and redirect to view.
  */
 export const update = async (req, res, next) => {
   try {
@@ -42,8 +42,8 @@ export const update = async (req, res, next) => {
   }
 };
 
-/** ### /admin/pricelist/create 
- *  Render create form, or create new DB entry and redirect to view. 
+/** ### /admin/pricelist/create
+ *  Render create form, or create new DB entry and redirect to view.
  */
 export const create = async (req, res, next) => {
   try {
@@ -52,6 +52,22 @@ export const create = async (req, res, next) => {
       res.redirect(`admin/pricelist/view/${model.id}`);
     }
     res.render("admin/pricelist/create", { model: [] });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const types = async (req, res, next) => {
+  try {
+    res.send(await Pricelist.getTypes());
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const makes = async (req, res, next) => {
+  try {
+    res.send(await Pricelist.getMakes(req.params.type));
   } catch (err) {
     next(err);
   }

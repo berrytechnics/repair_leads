@@ -47,7 +47,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use("/", leadRouter);
 app.use("/admin", adminRouter);
-app.use((req, res, next) => {
+app.use((err, req, res, next) => {
+  if(err) next(err)
   res.status(404);
   next(new Error("That link appears to be broken."));
 });

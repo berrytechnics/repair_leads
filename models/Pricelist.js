@@ -52,31 +52,35 @@ const Pricelist = mongoose.model(
   })
 );
 
-/**
- * Get list of all devices and repairs without prices.
- * @returns {object} JSON Object
- */
-async function getRepairList () {
-  const models = await Pricelist.find();
-  const filteredModels = models.map((model) => {
-    {
-      const filteredRepairs = Object.keys(model.repairs);
-      filteredRepairs.forEach((repair, i) => {
-        filteredRepairs[i] =
-          repair.toLowerCase() === "lcd"
-            ? Camelizer.decamelize(repair, true)
-            : Camelizer.decamelize(repair);
-      });
-      return {
-        repairs: filteredRepairs,
-        type: model.type,
-        make: model.make,
-        model: model.model,
-      };
-    }
-  });
-  return JSON.stringify(filteredModels);
+/** Returns all device types */
+Pricelist.getTypes = async () => {
+  try {
+    return Pricelist.find().distinct("type");
+  } catch (err) {
+    next(err);
+  }
 };
-Pricelist.getRepairList = getRepairList;
+Pricelist.getMakes = async (type) => {
+  try {
+    return Pricelist.find({ 'type': type }).distinct("make");
+  } catch (err) {
+    next(err);
+  }
+};
+Pricelist.getModels = async (make) => {
+  try {
+    return await Pricelist.find({ make: make }).distinct("model");
+    res.send(models);
+  } catch (err) {
+    next(err);
+  }
+};
+Pricelist.getIssues = async (model) => {
+  try {
+    return await Pricelist.find({ model: model }).select("repairs");
+  } catch (err) {
+    next(err);
+  }
+};
 
 export default Pricelist;

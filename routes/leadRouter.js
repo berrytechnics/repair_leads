@@ -1,9 +1,9 @@
 import express from "express";
 import * as Lead from '../controllers/LeadController.js';
-
+import * as Pricelist from '../controllers/PricelistController.js'
 const router = express.Router();
 
 router.all(['/','/index'], Lead.index );
-router.all('/create', Lead.create );
+router.get('/makes/:type', Pricelist.makes );
 
 export default router;
