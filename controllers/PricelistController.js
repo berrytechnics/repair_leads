@@ -59,10 +59,7 @@ export const create = async (req, res, next) => {
 
 /**
  * Returns data for widget.
- * @param {obj} req 
- * @param {obj} res 
- * @param {obj} next 
- * @returns {obj} JSON object
+ * @returns JSON object
  */
 export const types = async (req, res, next) => {
   try {
@@ -74,25 +71,19 @@ export const types = async (req, res, next) => {
 
 /**
  * Returns data for widget.
- * @param {obj} req 
- * @param {obj} res 
- * @param {obj} next 
- * @returns {obj} JSON object
+ * @returns JSON object
  */
 export const makes = async (req, res, next) => {
   try {
     res.send(await Pricelist.getMakes(req.params.type));
   } catch (err) {
     next(err);
-  }F
+  }
 };
 
 /**
  * Returns data for widget.
- * @param {obj} req 
- * @param {obj} res 
- * @param {obj} next 
- * @returns {obj} JSON object
+ * @returns JSON object
  */
 export const models = async (req, res, next) => {
   try {
@@ -104,10 +95,7 @@ export const models = async (req, res, next) => {
 
 /**
  * Returns data for widget.
- * @param {obj} req 
- * @param {obj} res 
- * @param {obj} next 
- * @returns {obj} JSON object
+ * @returns JSON object
  */
 export const repairs = async (req, res, next) => {
   try {

@@ -8,6 +8,7 @@ To get started with Repair Leads, follow these steps:
 
 ### Prerequisites
 * Node.js v14.17.0 or later
+* Yarn v1.22 or later
 * MongoDB v4.4.6 or later
   
 ## Installation
@@ -22,7 +23,7 @@ git clone https://github.com/berrytechnics/repair_leads.git
 
  ``` 
  cd repair_leads
- npm i
+ yarn
  ```
 
 3. Configure enviornment variables:
