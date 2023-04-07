@@ -47,4 +47,4 @@ If you'd like to contribute to Repair Leads, please fork this repository and sub
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for more information.
+This project is licensed under the GNU GPLv3 License. See the LICENSE file for more information.

@@ -1,7 +1,10 @@
 {
   "name": "repair-leads",
   "version": "0.0.1",
-  "description": "thephonedoctors.com leads widget server",
+  "description": "Mobile device repair quoting widget for generating sales leads.",
+  "keywords": ["repair","iphone","android","sales","leads"],
+  "homepage": "https://github.com/berrytechnics/repair_leads",
+  "bugs" : "https://github.com/berrytechnics/repair_leads/issues",
   "private": true,
   "type": "module",
   "main": "server.js",
@@ -32,5 +35,6 @@
   },
   "devDependencies": {
     "chalk": "^5.0.1"
-  }
+  },
+  "license": "GNU GPLv3"
 }

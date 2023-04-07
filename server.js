@@ -36,7 +36,7 @@ app.use(express.static(path.join(dirName, "public")));
 app.use(cookieParser("pdinctulok18"));
 app.use(
   session({
-    secret: "flyingpeanut970",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 60 * 60 * 1000 },
@@ -48,14 +48,8 @@ app.use(passport.session());
 app.use("/", leadRouter);
 app.use("/admin", adminRouter);
 app.use((err, req, res, next) => {
-  if(err) next(err)
-  res.status(404);
-  next(new Error("That link appears to be broken."));
-});
-app.use((err, req, res, next) => {
-  err.status = 500;
   console.error(err);
-  res.status(500).render("error", { err: err });
+  res.render("error", { err: err });
 });
 
 try {

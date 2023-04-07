@@ -37,10 +37,10 @@ export const register = async (req, res, next) => {
 
 /** ### /admin/dashboard 
  * Render admin dashboard. 
- F*/
+ */
 export const dashboard = async (req, res, next) => {
   try {
-    res.render("admin/dashboard", { data: [] });
+    res.render("admin/dashboard", { model: [] });
   } catch (err) {
     next(err);
   }

@@ -17,7 +17,7 @@ router.post(
       res.json({ errors: errors.array() });
     } else next();
   },
-  Lead.index
+  Lead.create
 );
 
 router.get("/makes/:type", Pricelist.makes);
