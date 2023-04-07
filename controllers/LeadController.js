@@ -1,6 +1,6 @@
-import { camelize } from "../helpers/Camelizer.js";
 import Lead from "../models/Lead.js";
 import Pricelist from "../models/PriceList.js";
+import { camelize } from "../helpers/Camelizer.js";
 
 /**
  * ### /index
@@ -10,18 +10,18 @@ import Pricelist from "../models/PriceList.js";
 export const index = async (req, res, next) => {
   if (req.method === "POST") {
     try {
-      let repairPrice
+      let repairPrice;
       const prices = await Pricelist.findOne(
         { model: req.body.model },
         "repairs"
       );
-      repairPrice = parseFloat(prices.repairs[`${camelize(req.body.repair)}`]) ;
-      repairPrice ? null : repairPrice = 'Not available'
+      repairPrice = parseFloat(prices.repairs[`${camelize(req.body.repair)}`]);
+      repairPrice ? null : (repairPrice = "Not available");
       // await new Lead(req.body).save();
+      // TODO: Send quote to customer
       res.json({
         success: "success",
         message: "Thank you for your request.",
-        price: repairPrice,
       });
     } catch (err) {
       next(err);

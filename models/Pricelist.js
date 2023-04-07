@@ -62,29 +62,29 @@ Pricelist.getTypes = async () => {
 };
 Pricelist.getMakes = async (type) => {
   try {
-    return Pricelist.find({ 'type': type }).distinct("make");
+    return Pricelist.find({ type: type }).distinct("make");
   } catch (err) {
     next(err);
   }
 };
 Pricelist.getModels = async (make) => {
   try {
-    return await Pricelist.find({ 'make': make }).distinct("model");
+    return await Pricelist.find({ make: make }).distinct("model");
   } catch (err) {
     next(err);
   }
 };
 Pricelist.getRepairs = async (model) => {
   try {
-    const repairList = await Pricelist.findOne({ 'model': model }).select(
+    const repairList = await Pricelist.findOne({ model: model }).select(
       "repairs"
     );
     let repairs = Object.keys(repairList.repairs);
     let repairArr = [];
-    repairs.forEach(repair => {
-      repairArr.push(Camelizer.decamelize(repair))
-    })
-    return repairArr
+    repairs.forEach((repair) => {
+      repairArr.push(Camelizer.decamelize(repair));
+    });
+    return repairArr;
   } catch (err) {
     next(err);
   }

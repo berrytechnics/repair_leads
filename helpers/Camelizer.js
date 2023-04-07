@@ -1,7 +1,7 @@
 /**
  * ### Returns str as one camelized word. (See example)
  * @param {string} str string to camelize
- * @param {boolean} noCaps return string without any uppercase letters 
+ * @param {boolean} noCaps return string withoFut any uppercase letters 
  * @example 
  * // returns "helloWorld"
  * camelize("Hello World")

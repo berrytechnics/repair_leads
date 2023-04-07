@@ -2,9 +2,9 @@ import nodemailer from "nodemailer";
 import ejs from "ejs";
 
 /** Email contact form data to admin.
- * @param {string} name Sender name 
+ * @param {string} name Sender name
  * @param {string} from FROM Email address
- * @param {string} message Message content 
+ * @param {string} message Message content
  * @returns Object
  */
 export const contact = async (name, from, message) => {

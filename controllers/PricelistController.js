@@ -84,7 +84,7 @@ export const makes = async (req, res, next) => {
     res.send(await Pricelist.getMakes(req.params.type));
   } catch (err) {
     next(err);
-  }
+  }F
 };
 
 /**
