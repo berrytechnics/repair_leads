@@ -44,7 +44,6 @@ export const dashboard = async (req, res, next) => {
   try {
     const now = new Date(Date.now());
     const thisMonth = new Date(`${now.getMonth()+1}/1/${now.getFullYear()}`);
-    console.log(thisMonth)
     let models = await Lead.find({date: {$gte: thisMonth}});
     res.render("admin/dashboard", { models: models });
   } catch (err) {
