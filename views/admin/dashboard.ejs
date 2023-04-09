@@ -181,39 +181,6 @@
   var models = JSON.parse(`<%- JSON.stringify(models) %>`);
   let table;
   $(document).ready(function () {
-    // Edit modal
-    $(".form-cancel").click((e) => {
-      $(".form-control").val("");
-      $(".form-control").removeClass("is-valid");
-    });
-    $(".link-edit").click((e) => {
-      const model = models.find((model) => model._id == e.currentTarget.id);
-      $("input[name=id]").val(model._id).removeClass("is-invalid");
-      $("input[name=name]").val(model.name).removeClass("is-invalid");
-      $("input[name=email]").val(model.email).removeClass("is-invalid");
-      $("input[name=phone]").val(model.phone).removeClass("is-invalid");
-      $("input[name=make]").val(model.make).removeClass("is-invalid");
-      $("input[name=model]").val(model.model).removeClass("is-invalid");
-      $("input[name=issue]").val(model.issue).removeClass("is-invalid");
-      $("input[name=price]").val(model.price).removeClass("is-invalid");
-      $("input[name=price]").prop("checked", model.converted);
-    });
-    $("form").submit(function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      let formData = formJson($(this));
-      formData.converted = $("input[id=converted]").is(":checked");
-      $.post("lead/update", formData, (res) => {
-        if (res.errors) {
-          res.errors.forEach((error) => {
-            $(`input[name=${error}]`).addClass("is-invalid");
-          });
-        } else {
-          $(`input.form-control`).addClass("is-valid");
-          console.log(res);
-        }
-      });
-    });
     // Datatable
     table = $("#leadsTable").DataTable({
       dom: "Bfrtip",
@@ -221,8 +188,15 @@
       buttons: ["csv"],
       ajax: "lead/dataTable",
       columns: [
-        // {data: ""},
-        {},
+        {
+          data: null,
+          render: function (data, type, row) {
+            return `
+                <a id="${data._id}" data-bs-toggle="modal" onclick="editModal(event)" data-bs-target=".editModal" href="#" class="link link-edit"><i class="fa fa-money-check-dollar text-success me-2"></i></a>
+                <a id="${data._id}" data-bs-toggle="modal" data-bs-target=".deleteModal" class="link" href="#"><i class="fa fa-trash text-danger"></i></a>
+                `;
+          },
+        },
         { data: "location" },
         { data: "date" },
         { data: "name" },
@@ -234,9 +208,11 @@
         { data: "price" },
       ],
     });
-    $('<button class="dt-button buttons-csv buttons-html5" tabindex="0" aria-controls="leadsTable" type="button" onclick="table.ajax.reload(null,false)"><i class="fa fa-refresh"></i></button>').appendTo('div.dataTables_filter');
-    $.fn.dataTable.ext.errMode = function ( settings, helpPage, message ) { 
-        console.log(message);
+    $(
+      '<button class="dt-button buttons-csv buttons-html5" tabindex="0" aria-controls="leadsTable" type="button" onclick="table.ajax.reload(null,false)"><i class="fa fa-refresh"></i></button>'
+    ).appendTo("div.dataTables_filter");
+    $.fn.dataTable.ext.errMode = function (settings, helpPage, message) {
+      console.log(message);
     };
     // Chart
     const byStoreColors = [];
@@ -270,6 +246,40 @@
           text: `Total Leads (current month)`,
         },
       },
+    });
+  });
+
+  // Edit modal
+  $(".form-cancel").click((e) => {
+    $(".form-control").val("");
+    $(".form-control").removeClass("is-valid");
+  });
+  function editModal(e) {
+    const model = models.find((model) => model._id == e.currentTarget.id);
+    $("input[name=id]").val(model._id).removeClass("is-invalid");
+    $("input[name=name]").val(model.name).removeClass("is-invalid");
+    $("input[name=email]").val(model.email).removeClass("is-invalid");
+    $("input[name=phone]").val(model.phone).removeClass("is-invalid");
+    $("input[name=make]").val(model.make).removeClass("is-invalid");
+    $("input[name=model]").val(model.model).removeClass("is-invalid");
+    $("input[name=issue]").val(model.issue).removeClass("is-invalid");
+    $("input[name=price]").val(model.price).removeClass("is-invalid");
+    $("input[name=price]").prop("checked", model.converted);
+  }
+  $("form").submit(function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    let formData = formJson($(this));
+    formData.converted = $("input[id=converted]").is(":checked");
+    $.post("lead/update", formData, (res) => {
+      if (res.errors) {
+        res.errors.forEach((error) => {
+          $(`input[name=${error}]`).addClass("is-invalid");
+        });
+      } else {
+        $(`input.form-control`).addClass("is-valid");
+        console.log(res);
+      }
     });
   });
 
