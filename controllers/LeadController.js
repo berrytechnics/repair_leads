@@ -40,3 +40,11 @@ export const create = async (req, res, next) => {
     next(err);
   }
 };
+
+export const update = async (req, res, next) => {
+  try {
+    return false
+  } catch (err) {
+    next(err);
+  }
+};
