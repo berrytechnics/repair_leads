@@ -198,7 +198,13 @@
           },
         },
         { data: "location" },
-        { data: "date" },
+        {
+          data: "date",
+          render: function(data,type,row){
+            var date = new Date(data);
+            return date.toLocaleDateString()
+          }
+        },
         { data: "name" },
         { data: "email" },
         { data: "phone" },
@@ -214,6 +220,7 @@
     $.fn.dataTable.ext.errMode = function (settings, helpPage, message) {
       console.log(message);
     };
+
     // Chart
     const byStoreColors = [];
     const byStore_X = models
