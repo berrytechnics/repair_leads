@@ -1,8 +1,8 @@
 import express from "express";
-import { body } from 'express-validator';
+import { body } from "express-validator";
 import * as User from "../controllers/UserController.js";
 import * as Pricelist from "../controllers/PricelistController.js";
-import * as Lead from '../controllers/LeadController.js';
+import * as Lead from "../controllers/LeadController.js";
 
 const router = express.Router();
 
@@ -16,12 +16,17 @@ router.all("/pricelist/view/:id", Pricelist.view);
 router.all("/pricelist/update/:id", Pricelist.update);
 
 router.post(
-'/lead/update',  
-body("name").trim().escape(),
-body("email").isEmail().normalizeEmail(),
-body("phone").isMobilePhone().trim().escape(),
-body("name").trim().escape(),
-Lead.update
-)
+  "/lead/update",
+  body("name").trim().escape(),
+  body("email").isEmail().normalizeEmail(),
+  body("phone").isMobilePhone().trim().escape(),
+  body("make").trim().escape(),
+  body("model").trim().escape(),
+  body("issue").trim().escape(),
+  body("price").trim().escape(),
+  Lead.update
+);
+
+router.get('/lead/dataTable', Lead.dataTable)
 
 export default router;

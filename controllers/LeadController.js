@@ -41,9 +41,24 @@ export const create = async (req, res, next) => {
   }
 };
 
+/**
+ * ### /leads/update POST
+ * Updates lead model.
+ */
 export const update = async (req, res, next) => {
   try {
-    return false
+    res.send(req.body);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const dataTable = async (req, res, next) => {
+  try {
+    const now = new Date(Date.now());
+    const thisMonth = new Date(`${now.getMonth() + 1}/1/${now.getFullYear()}`);
+    let models = await Lead.find({ date: { $gte: thisMonth } });
+    res.send({ data: models });
   } catch (err) {
     next(err);
   }
