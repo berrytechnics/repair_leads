@@ -207,11 +207,22 @@
         },
         { data: "name" },
         { data: "email" },
-        { data: "phone" },
+        {
+          data: "phone",
+          render: function(data,type,row){
+            return data.replace("-","");
+          }
+        },
         { data: "make" },
         { data: "model" },
         { data: "issue" },
-        { data: "price" },
+        {
+          data: "price",
+          render: function(data,type,row){
+            if(data==null || data==0 || data=="0") return "N/A";
+            else return data
+          }
+        },
       ],
     });
     $(
