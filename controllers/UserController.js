@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import Lead from '../models/Lead.js';
 
 /** ### /admin/login 
  * Render login form, or log user in and redirect to dashboard. 
@@ -6,7 +7,8 @@ import User from "../models/User.js";
 export const login = async (req, res, next) => {
   if (req.method === "POST") {
     try {
-      res.redirect("/");
+      const { user } = await User.authenticate()(req.body.username)(req.body.password);
+      res.render('admin/dashboard', {model: user});
     } catch (err) {
       next(err);
     }
@@ -20,14 +22,14 @@ export const login = async (req, res, next) => {
 export const register = async (req, res, next) => {
   if (req.method === "POST") {
     try {
-      User.register(
-        { username: req.body.username },
-        req.body.password,
-        (err) => {
-          next(err);
-        }
-      );
-      res.redirect("/");
+      const user = new DefaultUser({
+        username: req.body.username, 
+        name: `${req.body.firstname} ${req.body.lastname}`,
+        active: false
+      });
+      await user.setPassword(req.body.password);
+      await user.save();
+      res.redirect("/admin/login");
     } catch (err) {
       next(err);
     }
@@ -40,7 +42,11 @@ export const register = async (req, res, next) => {
  */
 export const dashboard = async (req, res, next) => {
   try {
-    res.render("admin/dashboard", { model: [] });
+    const now = new Date(Date.now());
+    const thisMonth = new Date(`${now.getMonth()}/1/${now.getFullYear()}`);
+    let models = await Lead.find({date: {$gte: thisMonth}});
+    console.log(models)
+    res.render("admin/dashboard", { models: models });
   } catch (err) {
     next(err);
   }

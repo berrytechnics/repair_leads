@@ -7,6 +7,7 @@ Repair Leads is a web application that helps repair shop owners manage and track
 To get started with Repair Leads, follow these steps:
 
 ### Prerequisites
+
 * Node.js v14.17.0 or later
 * Yarn v1.22 or later
 * MongoDB v4.4.6 or later

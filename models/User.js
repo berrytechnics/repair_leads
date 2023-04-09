@@ -4,14 +4,10 @@ import passportLocalMongoose from "passport-local-mongoose";
 const Schema = mongoose.Schema;
 const User = new Schema({
   name: String,
-  admin: {
+  active: {
     type: Boolean,
-    default: false,
-  },
-  leads: {
-    type: Boolean,
-    default: false,
-  },
+    default: false
+  }
 });
 
 User.plugin(passportLocalMongoose);
