@@ -12,6 +12,13 @@
   rel="stylesheet"
   href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css"
 />
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
 <style>
   .chart {
     width: 100%;
@@ -23,13 +30,26 @@
   }
 </style>
 <html>
-  <div class="container">
+  <div class="container-fluid">
     <div class="row mt-3">
-      <div class="col-10">
+      <div class="col">
         <h1 class="ms-5">Admin Dashboard</h1>
       </div>
-      <div class="col-2">
-        <a class="link text-danger">Logout</a>
+      <div class="col">
+        <a class="link text-danger float-end mx-1"
+          ><i class="fa fa-right-from-bracket"></i> Logout</a
+        >
+        <a
+          class="link text-danger float-end mx-1"
+          target="_blank"
+          href="https://github.com/berrytechnics/repair_leads/issues/new"
+          ><i class="fa fa-bug"></i> Report Bug</a
+        >
+        <a
+          class="link text-danger float-end mx-1"
+          href="#"
+          ><i class="fa fa-user-astronaut"></i> Manage Users</a
+        >
       </div>
     </div>
     <div class="row">
