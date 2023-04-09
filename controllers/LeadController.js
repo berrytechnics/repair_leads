@@ -1,6 +1,6 @@
 import Lead from "../models/Lead.js";
 import Pricelist from "../models/PriceList.js";
-import { camelize } from "../helpers/Camelizer.js";
+import { camelize, decamelize } from "../helpers/Camelizer.js";
 
 /**
  * ### /index GET
@@ -58,6 +58,9 @@ export const dataTable = async (req, res, next) => {
     const now = new Date(Date.now());
     const thisMonth = new Date(`${now.getMonth() + 1}/1/${now.getFullYear()}`);
     let models = await Lead.find({ date: { $gte: thisMonth } });
+    models.forEach((model) => {
+      model.issue = decamelize(model.issue);
+    });
     res.send({ data: models });
   } catch (err) {
     next(err);

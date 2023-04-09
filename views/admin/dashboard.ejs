@@ -31,7 +31,7 @@
 </style>
 <html>
   <div class="container-fluid">
-    <div class="row mt-3">
+    <div class="row mt-3 component-leads-header">
       <div class="col">
         <h1 class="ms-5">Admin Dashboard</h1>
       </div>
@@ -50,13 +50,30 @@
         >
       </div>
     </div>
-    <div class="row mt-3">
-      <hr />
-      <div class="col chart chart-leads-byStore">
-        <canvas id="leads-byStore" class="chart"></canvas>
+    <div class="row mt-3 component-leads-charts">
+      <div class="col">
+        <div class="card">
+          <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs" data-bs-tabs="tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="true" data-bs-toggle="tab" href="#leads-byStore">Total</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#static">Potential $</a>
+                </li>
+            </ul>
+        </div>
+          <div class="card-body tab-content">
+            <div class="tab-pane active" id="chart-byStore">
+              <div class="chart chart-leads-byStore">
+                <canvas id="leads-byStore" class="chart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="row mt-3">
+    <div class="row mt-3 component-leads-table">
       <hr />
       <div class="col">
         <table id="leadsTable" class="stripe hover">
@@ -113,7 +130,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Modal title</h5>
+          <h5 class="modal-title">Update Lead</h5>
           <button
             type="button"
             class="btn-close form-cancel"
@@ -136,6 +153,8 @@
             <input required type="text" name="model" class="form-control" />
             <label class="fw-bold" for="name">Issue:</label>
             <input required type="text" name="issue" class="form-control" />
+            <label class="fw-bold" for="name">Price:</label>
+            <input required type="text" name="price" class="form-control" />
             <div class="form-check mt-1">
               <input class="form-check-input" type="checkbox" id="converted" />
               <label class="form-check-label" for="converted">
@@ -191,10 +210,10 @@
         {
           data: null,
           render: function (data, type, row) {
-            return `
+            return (`
                 <a id="${data._id}" data-bs-toggle="modal" onclick="editModal(event)" data-bs-target=".editModal" href="#" class="link link-edit"><i class="fa fa-money-check-dollar text-success me-2"></i></a>
                 <a id="${data._id}" data-bs-toggle="modal" data-bs-target=".deleteModal" class="link" href="#"><i class="fa fa-trash text-danger"></i></a>
-                `;
+                `);
           },
         },
         { data: "location" },
@@ -282,7 +301,7 @@
     $("input[name=model]").val(model.model).removeClass("is-invalid");
     $("input[name=issue]").val(model.issue).removeClass("is-invalid");
     $("input[name=price]").val(model.price).removeClass("is-invalid");
-    $("input[name=price]").prop("checked", model.converted);
+    $("input[name=converted]").prop("checked", model.converted);
   }
   $("form").submit(function (e) {
     e.preventDefault();
