@@ -20,6 +20,9 @@
   referrerpolicy="no-referrer"
 />
 <style>
+  a {
+    text-decoration: none !important;
+  }
   table {
     width: 100%;
   }
@@ -46,7 +49,10 @@
       </div>
     </div>
     <div class="row mt-3 component-users-table">
-      <a href="#" class="link link-success newUser text-end px-1"><i class="fa fa-plus"></i> User</a>
+      <hr />
+      <a href="#" class="link link-success newUser text-end px-3 pb-3"
+        ><i class="fa fa-user-plus"></i></a
+      >
       <table id="table" class="stripe hover">
         <thead>
           <th>Actions</th>
@@ -63,9 +69,10 @@
                 data-bs-target=".editModal"
                 href="#"
                 id="<%= model.id %>"
-                class="link link-warning mx-1 editBtn"
+                class="link link-primary mx-1 editBtn"
                 ><i class="fa fa-user-pen"></i
               ></a>
+              <a href="#" class="link link-warning"><i class="fa fa-key"></i></a>
               <a
                 data-bs-toggle="modal"
                 data-bs-target=".deleteModal"
@@ -186,11 +193,11 @@
     // Init datatable
     $("table").DataTable({});
     // New User modal
-    $('.newUser').click(e=>{
-        resetModal();
-        $('.editModal').modal('show')
-    })
-    // Edit User modal 
+    $(".newUser").click((e) => {
+      resetModal();
+      $(".editModal").modal("show");
+    });
+    // Edit User modal
     $(".editBtn").click((e) => {
       const model = models.find((model) => model._id == e.currentTarget.id);
       $(".form-control[name=id]").val(model._id);
