@@ -69,16 +69,25 @@
                 >Potential Revenue</a
               >
             </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#tab-captured"
+                >Captured Revenue</a
+              >
+            </li>
           </ul>
         </div>
         <div class="card-body tab-content">
           <div class="tab-pane active" id="tab-total">
-            <h5>Leads by Store</h5>
+            <h5>Leads by Store (current month)</h5>
             <canvas id="leads-byStore" class="chart"></canvas>
           </div>
           <div class="tab-pane" id="tab-potential">
-            <h5>Potential Revenue</h5>
+            <h5>Potential Revenue (current month)</h5>
             <canvas id="leads-potential" class="chart"></canvas>
+          </div>
+          <div class="tab-pane" id="tab-captured">
+            <h5>Captured Revenue (current month)</h5>
+            <canvas id="leads-captured" class="chart"></canvas>
           </div>
         </div>
       </div>
@@ -292,7 +301,6 @@
         legend: { display: false },
         title: {
           display: true,
-          text: `Total Leads (current month)`,
         },
       },
     });
@@ -332,7 +340,41 @@
         legend: { display: false },
         title: {
           display: true,
-          text: `Potential $ (current month)`,
+        },
+      },
+    });
+
+    // Chart setup - Captured
+    const capturedColors = [];
+    const captured_X = models
+      .map((model) => model.location)
+      .filter((model, i, self) => self.indexOf(model) === i);
+    const captured_Y = [];
+    captured_X.forEach((store) => {
+      const color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+      capturedColors.push(color);
+      let leads = models.filter((model) => model.location == store);
+      leads = leads.filter((lead) => lead.converted);
+      captured_Y.push(leads.length);
+    });
+    // Chart init
+    const leadsCapturedChart = new Chart("leads-captured", {
+      type: "bar",
+      data: {
+        labels: captured_X,
+        datasets: [
+          {
+            backgroundColor: capturedColors,
+            data: captured_Y,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: { display: false },
+        title: {
+          display: true,
         },
       },
     });
