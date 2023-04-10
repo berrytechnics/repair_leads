@@ -272,14 +272,14 @@
     };
 
     // Chart setup - Total
-    const byStoreColors = [];
+    const chartColors = [];
     const byStore_X = models
       .map((model) => model.location)
       .filter((model, i, self) => self.indexOf(model) === i);
     const byStore_Y = [];
     byStore_X.forEach((store) => {
       const color = "#" + Math.floor(Math.random() * 16777215).toString(16);
-      byStoreColors.push(color);
+      chartColors.push(color);
       const leads = models.filter((model) => model.location == store);
       byStore_Y.push(leads.length);
     });
@@ -290,7 +290,7 @@
         labels: byStore_X,
         datasets: [
           {
-            backgroundColor: byStoreColors,
+            backgroundColor: chartColors,
             data: byStore_Y,
           },
         ],
@@ -306,14 +306,11 @@
     });
 
     // Chart setup - Potential
-    const potentialColors = [];
     const potential_X = models
       .map((model) => model.location)
       .filter((model, i, self) => self.indexOf(model) === i);
     const potential_Y = [];
     potential_X.forEach((store) => {
-      const color = "#" + Math.floor(Math.random() * 16777215).toString(16);
-      potentialColors.push(color);
       const leads = models.filter((model) => model.location == store);
       let total = 0;
       leads.forEach((lead) => {
@@ -329,7 +326,7 @@
         labels: potential_X,
         datasets: [
           {
-            backgroundColor: potentialColors,
+            backgroundColor: chartColors,
             data: potential_Y,
           },
         ],
@@ -345,14 +342,11 @@
     });
 
     // Chart setup - Captured
-    const capturedColors = [];
     const captured_X = models
       .map((model) => model.location)
       .filter((model, i, self) => self.indexOf(model) === i);
     const captured_Y = [];
     captured_X.forEach((store) => {
-      const color = "#" + Math.floor(Math.random() * 16777215).toString(16);
-      capturedColors.push(color);
       let leads = models.filter((model) => model.location == store);
       leads = leads.filter((lead) => lead.converted);
       let total = 0;
@@ -369,7 +363,7 @@
         labels: captured_X,
         datasets: [
           {
-            backgroundColor: capturedColors,
+            backgroundColor: chartColors,
             data: captured_Y,
           },
         ],
