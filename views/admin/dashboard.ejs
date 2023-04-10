@@ -384,8 +384,7 @@
 
   // Edit modal cancel
   $(".form-cancel").click((e) => {
-    $(".form-control").val("");
-    $(".form-control").removeClass("is-valid");
+    resetEditModal();
   });
   // Edit modal show
   function editModal(e) {
@@ -413,7 +412,9 @@
         });
       } else {
         $(`input.form-control`).addClass("is-valid");
+        alert('Update Lead')
         console.log(res);
+        resetModal();
       }
     });
   });
@@ -426,5 +427,12 @@
         json[name] = value;
         return json;
       }, {});
+  }
+
+  // Reset Edit Modal data.
+  function resetModal(){
+    $(".form-control").val("");
+    $(".form-control").removeClass("is-valid");
+    $('.editModal').modal('hide');
   }
 </script>
