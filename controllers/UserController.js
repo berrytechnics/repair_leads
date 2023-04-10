@@ -57,3 +57,11 @@ export const dashboard = async (req, res, next) => {
   }
 };
 
+export const users = async (req, res, next) => {
+  try {
+    const models = await User.find({});
+    res.render("admin/users", { models: models });
+  } catch (err) {
+    next(err);
+  }
+};

@@ -27,6 +27,8 @@ router.post(
   Lead.update
 );
 
+router.get('/users', User.users)
+
 router.get('/lead/dataTable', Lead.dataTable)
 
 export default router;
