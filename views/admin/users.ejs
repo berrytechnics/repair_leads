@@ -72,7 +72,13 @@
                 class="link link-primary mx-1 editBtn"
                 ><i class="fa fa-user-pen"></i
               ></a>
-              <a data-bs-toggle="modal" data-bs-target=".resetModal" href="#" class="link link-warning"><i class="fa fa-key"></i></a>
+              <a 
+                data-bs-toggle="modal" 
+                data-bs-target=".resetModal" 
+                href="#" 
+                class="link link-warning"
+                ><i class="fa fa-key"></i
+              ></a>
               <a
                 data-bs-toggle="modal"
                 data-bs-target=".deleteModal"
@@ -146,7 +152,7 @@
           >
             Cancel
           </button>
-          <button type="button" class="btn btn-danger deleteConfirm">
+          <button type="button" class="btn btn-danger resetConfirm">
             Reset User
           </button>
         </div>
@@ -228,6 +234,11 @@
       resetModal();
       $(".editModal").modal("show");
     });
+    // Reset User modal
+    $('.resetConfirm').click((e) => {
+      alert('Password Reset')
+      $('.resetModal').modal('hide');
+    })
     // Edit User modal
     $(".editBtn").click((e) => {
       const model = models.find((model) => model._id == e.currentTarget.id);
@@ -241,12 +252,17 @@
       e.stopPropagation();
       e.preventDefault();
       alert("save");
+      $('.editModal').modal('hide');
+    });
+    // Delete User Confirmed
+    $(".deleteConfirm").click((e) => {
+      alert("delete");
+      $('.deleteModal').modal('hide');
     });
     // Reset User Form values
     function resetModal() {
       $(".form-control").val("");
     }
-    // Delete User Confirmed
-    $(".deleteConfirm").click((e) => alert("delete"));
+  
   });
 </script>
