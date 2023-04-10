@@ -51,30 +51,39 @@
       </div>
     </div>
     <div class="row mt-3 component-leads-charts">
-      <div class="col">
-        <div class="card">
-          <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs" data-bs-tabs="tabs">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="true" data-bs-toggle="tab" href="#leads-byStore">Total</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#static">Potential $</a>
-                </li>
-            </ul>
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">Charts</h5>
+          <ul class="nav nav-tabs card-header-tabs" data-bs-tabs="tabs">
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                aria-current="true"
+                data-bs-toggle="tab"
+                href="#tab-total"
+                >Total</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#tab-potential"
+                >Potential Revenue</a
+              >
+            </li>
+          </ul>
         </div>
-          <div class="card-body tab-content">
-            <div class="tab-pane active" id="chart-byStore">
-              <div class="chart chart-leads-byStore">
-                <canvas id="leads-byStore" class="chart"></canvas>
-              </div>
-            </div>
+        <div class="card-body tab-content">
+          <div class="tab-pane active" id="tab-total">
+            <h5>Leads by Store</h5>
+            <canvas id="leads-byStore" class="chart"></canvas>
+          </div>
+          <div class="tab-pane" id="tab-potential">
+            <h5>Potential Revenue</h5>
+            <canvas id="leads-potential" class="chart"></canvas>
           </div>
         </div>
       </div>
     </div>
     <div class="row mt-3 component-leads-table">
-      <hr />
       <div class="col">
         <table id="leadsTable" class="stripe hover">
           <thead>
@@ -198,10 +207,10 @@
 <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
 <script>
   var models = JSON.parse(`<%- JSON.stringify(models) %>`);
-  let table;
+  let datatable;
   $(document).ready(function () {
-    // Datatable
-    table = $("#leadsTable").DataTable({
+    // Datatable init
+    datatable = $("#leadsTable").DataTable({
       dom: "Bfrtip",
       pageLength: 1000,
       buttons: ["csv"],
@@ -210,48 +219,50 @@
         {
           data: null,
           render: function (data, type, row) {
-            return (`
+            return `
                 <a id="${data._id}" data-bs-toggle="modal" onclick="editModal(event)" data-bs-target=".editModal" href="#" class="link link-edit"><i class="fa fa-money-check-dollar text-success me-2"></i></a>
                 <a id="${data._id}" data-bs-toggle="modal" data-bs-target=".deleteModal" class="link" href="#"><i class="fa fa-trash text-danger"></i></a>
-                `);
+                `;
           },
         },
         { data: "location" },
         {
           data: "date",
-          render: function(data,type,row){
+          render: function (data, type, row) {
             var date = new Date(data);
-            return date.toLocaleDateString()
-          }
+            return date.toLocaleDateString();
+          },
         },
         { data: "name" },
         { data: "email" },
         {
           data: "phone",
-          render: function(data,type,row){
-            return data.replace("-","");
-          }
+          render: function (data, type, row) {
+            return data.replace("-", "");
+          },
         },
         { data: "make" },
         { data: "model" },
         { data: "issue" },
         {
           data: "price",
-          render: function(data,type,row){
-            if(data==null || data==0 || data=="0") return "N/A";
-            else return data
-          }
+          render: function (data, type, row) {
+            if (data == null || data == 0 || data == "0") return "N/A";
+            else return data;
+          },
         },
       ],
     });
+    // Datatable refresh button
     $(
       '<button class="dt-button buttons-csv buttons-html5" tabindex="0" aria-controls="leadsTable" type="button" onclick="table.ajax.reload(null,false)"><i class="fa fa-refresh"></i></button>'
     ).appendTo("div.dataTables_filter");
+    // Datatable error handler
     $.fn.dataTable.ext.errMode = function (settings, helpPage, message) {
       console.log(message);
     };
 
-    // Chart
+    // Chart setup - Total
     const byStoreColors = [];
     const byStore_X = models
       .map((model) => model.location)
@@ -263,6 +274,7 @@
       const leads = models.filter((model) => model.location == store);
       byStore_Y.push(leads.length);
     });
+    // Chart init
     const leadsByStoreChart = new Chart("leads-byStore", {
       type: "bar",
       data: {
@@ -284,13 +296,54 @@
         },
       },
     });
+
+    // Chart setup - Potential
+    const potentialColors = [];
+    const potential_X = models
+      .map((model) => model.location)
+      .filter((model, i, self) => self.indexOf(model) === i);
+    const potential_Y = [];
+    potential_X.forEach((store) => {
+      const color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+      potentialColors.push(color);
+      const leads = models.filter((model) => model.location == store);
+      let total = 0;
+      leads.forEach((lead) => {
+        let n = lead.price;
+        if (isFinite(n)) total += n;
+      });
+      potential_Y.push(Math.floor(total));
+    });
+    // Chart init
+    const leadsPotentialChart = new Chart("leads-potential", {
+      type: "bar",
+      data: {
+        labels: potential_X,
+        datasets: [
+          {
+            backgroundColor: potentialColors,
+            data: potential_Y,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: { display: false },
+        title: {
+          display: true,
+          text: `Potential $ (current month)`,
+        },
+      },
+    });
   });
 
-  // Edit modal
+  // Edit modal cancel
   $(".form-cancel").click((e) => {
     $(".form-control").val("");
     $(".form-control").removeClass("is-valid");
   });
+  // Edit modal show
   function editModal(e) {
     const model = models.find((model) => model._id == e.currentTarget.id);
     $("input[name=id]").val(model._id).removeClass("is-invalid");
@@ -303,6 +356,7 @@
     $("input[name=price]").val(model.price).removeClass("is-invalid");
     $("input[name=converted]").prop("checked", model.converted);
   }
+  // Edit modal submit
   $("form").submit(function (e) {
     e.preventDefault();
     e.stopPropagation();
@@ -320,6 +374,7 @@
     });
   });
 
+  // Convert form element data to JSON
   function formJson(form) {
     return $(form)
       .serializeArray()
