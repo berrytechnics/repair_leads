@@ -355,7 +355,12 @@
       capturedColors.push(color);
       let leads = models.filter((model) => model.location == store);
       leads = leads.filter((lead) => lead.converted);
-      captured_Y.push(leads.length);
+      let total = 0;
+      leads.forEach(lead=>{
+        let n = lead.price;
+        if (isFinite(n)) total += n;
+      })
+      captured_Y.push(Math.floor(total));
     });
     // Chart init
     const leadsCapturedChart = new Chart("leads-captured", {
