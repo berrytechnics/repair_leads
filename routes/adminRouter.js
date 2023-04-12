@@ -3,6 +3,7 @@ import { body } from "express-validator";
 import * as User from "../controllers/UserController.js";
 import * as Pricelist from "../controllers/PricelistController.js";
 import * as Lead from "../controllers/LeadController.js";
+import * as Location from "../controllers/LocationController.js";
 
 const router = express.Router();
 
@@ -14,6 +15,8 @@ router.all("/pricelist", Pricelist.index);
 router.all("/pricelist/create", Pricelist.create);
 router.all("/pricelist/view/:id", Pricelist.view);
 router.all("/pricelist/update/:id", Pricelist.update);
+
+router.get("/location", Location.index);
 
 router.post(
   "/lead/update",
@@ -27,8 +30,8 @@ router.post(
   Lead.update
 );
 
-router.get('/users', User.users)
+router.get("/users", User.users);
 
-router.get('/lead/dataTable', Lead.dataTable)
+router.get("/lead/dataTable", Lead.dataTable);
 
 export default router;
