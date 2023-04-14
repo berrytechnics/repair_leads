@@ -197,6 +197,19 @@
       </div>
     </div>
   </div>
+  <!-- TOAST  -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-body">
+        <div class="row">
+          <div class="col">Leads Table Reloaded. Click <a href="#" onclick="window.location.reload()" class='link'>here</a> to reload chart.</div>
+          <div class="col-2">
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </html>
 <script
   src="https://code.jquery.com/jquery-3.6.4.min.js"
@@ -218,14 +231,25 @@
 <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
 <script>
-  var models = JSON.parse(`<%- JSON.stringify(models) %>`);
+  const models = JSON.parse(`<%- JSON.stringify(models) %>`);
   let datatable;
+  let toast;
   $(document).ready(function () {
+    toast = new bootstrap.Toast($('#liveToast'))
     // Datatable init
     datatable = $("#leadsTable").DataTable({
       dom: "Bfrtip",
       pageLength: 1000,
-      buttons: ["csv"],
+      buttons: [
+        {
+            text: `<span id="liveToastBtn" class="p-1"><i class="fa fa-arrows-rotate"></i></span>`,
+            action: function ( e, dt, node, config ) {
+                dt.ajax.reload();
+                toast.show();
+            }
+        },
+        "csv",
+      ],
       ajax: "lead/dataTable",
       columns: [
         {
@@ -265,10 +289,7 @@
         },
       ],
     });
-    // Datatable refresh button
-    $(
-      '<button class="dt-button buttons-csv buttons-html5" tabindex="0" aria-controls="leadsTable" type="button" onclick="table.ajax.reload(null,false)"><i class="fa fa-refresh"></i></button>'
-    ).appendTo("div.dataTables_filter");
+    
     // Datatable error handler
     $.fn.dataTable.ext.errMode = function (settings, helpPage, message) {
       console.log(message);
@@ -286,6 +307,7 @@
       const leads = models.filter((model) => model.location == store);
       byStore_Y.push(leads.length);
     });
+ 
     // Chart init
     const leadsByStoreChart = new Chart("leads-byStore", {
       type: "bar",
@@ -322,6 +344,7 @@
       });
       potential_Y.push(Math.floor(total));
     });
+ 
     // Chart init
     const leadsPotentialChart = new Chart("leads-potential", {
       type: "bar",
@@ -359,6 +382,7 @@
       })
       captured_Y.push(Math.floor(total));
     });
+
     // Chart init
     const leadsCapturedChart = new Chart("leads-captured", {
       type: "bar",
@@ -386,6 +410,7 @@
   $(".form-cancel").click((e) => {
     resetEditModal();
   });
+  
   // Edit modal show
   function editModal(e) {
     const model = models.find((model) => model._id == e.currentTarget.id);
@@ -399,6 +424,7 @@
     $("input[name=price]").val(model.price).removeClass("is-invalid");
     $("input[name=converted]").prop("checked", model.converted);
   }
+  
   // Edit modal submit
   $("form").submit(function (e) {
     e.preventDefault();
