@@ -260,7 +260,7 @@
   $(document).ready(function () {
     toast = new bootstrap.Toast($("#liveToast"));
     // Datatable init
-    $.fn.dataTable.moment("MM-DD-YY");
+    $.fn.dataTable.moment("M/DD");
     datatable = $("#leadsTable").DataTable({
       dom: "Bfrtip",
       pageLength: 1000,
@@ -291,7 +291,7 @@
           data: "date",
           render: function (data, type, row) {
             var date = new Date(data);
-            return moment(date).format("MM-DD-YY");
+            return moment(date).format("M/DD");
           },
         },
         { data: "name" },
@@ -320,8 +320,13 @@
       console.log(message);
     };
 
-    // Chart setup - Total
-    const chartColors = [];
+    _initChart();
+  });
+
+  // Chart setup
+  function _initChart(){
+        // Chart setup - Total
+        const chartColors = [];
     const byStore_X = models
       .map((model) => model.location)
       .filter((model, i, self) => self.indexOf(model) === i);
@@ -429,7 +434,7 @@
         },
       },
     });
-  });
+  };
 
   // Edit modal cancel
   $(".form-cancel").click((e) => {
