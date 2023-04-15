@@ -65,3 +65,19 @@ export const users = async (req, res, next) => {
     next(err);
   }
 };
+
+export const renderPasswordReset = async (req, res, next) => {
+  try {
+    const user_id = req.query.id;
+    if(!user_id) next(new Error('Invalid request. Reset account with system admin.'))
+    const user = await User.findById(user_id);
+    res.render("admin/reset", {
+      data: {
+        user: { username: user.username, id: user.id },
+        token: "token",
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};

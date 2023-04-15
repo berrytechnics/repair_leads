@@ -10,17 +10,15 @@
             <div class="col">
                 <div class="card">
                     <div class="card-header text-light bg-danger">
-                        <h1>Register</h1>
+                        <h2>Reset Password - <%= data.user.username %></h2>
                     </div>
                     <div class="card-body">
-                        <form action="">
-                            <label for="username">Email:</label>
-                            <input type="email" name="email" class="form-control">
+                        <form action="/admin/forgot" method="POST">
                             <label for="password">Password:</label>
                             <input type="password" name="password" class="form-control">
-                            <label for="password2">Confirm Password:</label>
-                            <input type="password2" name="password2" class="form-control">
-                            <input type="submit" value="Register" class="btn btn-danger mt-3 float-end">
+                            <label for="password">Confirm Password:</label>
+                            <input type="password" name="password2" class="form-control">
+                            <input type="submit" value="Reset Password" class="btn btn-danger mt-3 float-end">
                         </form>
                     </div>
                 </div>

@@ -11,7 +11,7 @@ export const create = async (req, res, next) => {
 export const index = async (req, res, next) => {
   try {
     const models = await Location.find();
-    res.render("admin/location/index", { models: models });
+    res.render("location/index", { models: models });
   } catch (err) {
     next(err);
   }

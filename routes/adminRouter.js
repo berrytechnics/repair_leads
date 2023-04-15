@@ -8,8 +8,8 @@ import * as Location from "../controllers/LocationController.js";
 const router = express.Router();
 
 router.all("/login", User.login);
-router.all("/register", User.register);
 router.get("/dashboard", User.dashboard);
+router.get("/password-reset", User.renderPasswordReset);
 
 router.all("/pricelist", Pricelist.index);
 router.all("/pricelist/create", Pricelist.create);
