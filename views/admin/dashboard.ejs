@@ -31,6 +31,13 @@
   table {
     width: 100%;
   }
+  .toast{
+    width:12rem !important;
+  }
+  .btn-close-toast{
+    position: relative !important;
+    right: 1rem !important;
+  }
 </style>
 <html>
   <div class="container-fluid">
@@ -201,22 +208,19 @@
   <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div
       id="liveToast"
-      class="toast"
+      class="toast toast-sm text-bg-primary"
       role="alert"
       aria-live="assertive"
       aria-atomic="true"
+      data-bs-delay="1500"
     >
       <div class="toast-body">
         <div class="row">
-          <div class="col">
-            Leads Table Reloaded. Click
-            <a href="#" onclick="window.location.reload()" class="link">here</a>
-            to reload chart.
-          </div>
+          <div class="col text-center">Leads Reloaded.</div>
           <div class="col-2">
             <button
               type="button"
-              class="btn-close"
+              class="btn-close btn-close-toast"
               data-bs-dismiss="toast"
               aria-label="Close"
             ></button>
@@ -252,13 +256,12 @@
 <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/plug-ins/1.10.12/sorting/datetime-moment.js"></script>
-
 <script>
-  const models = JSON.parse(`<%- JSON.stringify(models) %>`);
+  let models = JSON.parse(`<%- JSON.stringify(models) %>`);
+  let chartColors;
   let datatable;
   let toast;
   $(document).ready(function () {
-    toast = new bootstrap.Toast($("#liveToast"));
     // Datatable init
     $.fn.dataTable.moment("M/DD");
     datatable = $("#leadsTable").DataTable({
@@ -267,9 +270,11 @@
       buttons: [
         {
           text: `<span id="liveToastBtn" class="p-1"><i class="fa fa-arrows-rotate"></i></span>`,
-          action: function (e, dt, node, config) {
-            dt.ajax.reload();
-            toast.show();
+          action: async function (e, dt, node, config) {
+            data = await dt.ajax.reload();
+            $("#liveToast").toast('show');
+            models = data.context[0].json.data;
+            _initChart();
           },
         },
         "csv",
@@ -319,21 +324,18 @@
     $.fn.dataTable.ext.errMode = function (settings, helpPage, message) {
       console.log(message);
     };
-
+    _initChartColors();
     _initChart();
   });
 
   // Chart setup
-  function _initChart(){
-        // Chart setup - Total
-        const chartColors = [];
+  function _initChart() {
+    // Chart setup - Total
     const byStore_X = models
       .map((model) => model.location)
       .filter((model, i, self) => self.indexOf(model) === i);
     const byStore_Y = [];
     byStore_X.forEach((store) => {
-      const color = "#" + Math.floor(Math.random() * 16777215).toString(16);
-      chartColors.push(color);
       const leads = models.filter((model) => model.location == store);
       byStore_Y.push(leads.length);
     });
@@ -434,7 +436,20 @@
         },
       },
     });
-  };
+  }
+  function _initChartColors(){
+    chartColors = [];
+    const byStore_X = models
+      .map((model) => model.location)
+      .filter((model, i, self) => self.indexOf(model) === i);
+    const byStore_Y = [];
+    byStore_X.forEach((store) => {
+      const color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+      chartColors.push(color);
+      const leads = models.filter((model) => model.location == store);
+      byStore_Y.push(leads.length);
+    });
+  }
 
   // Edit modal cancel
   $(".form-cancel").click((e) => {
