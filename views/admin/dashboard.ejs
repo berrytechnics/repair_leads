@@ -148,7 +148,7 @@
           >
             Cancel
           </button>
-          <button type="button" class="btn btn-danger">Delete Lead</button>
+          <button type="button" class="btn btn-danger" onclick="deleteLead(event)">Delete Lead</button>
         </div>
       </div>
     </div>
@@ -208,7 +208,7 @@
   <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div
       id="liveToast"
-      class="toast toast-sm text-bg-secondary"
+      class="toast toast-sm"
       role="alert"
       aria-live="assertive"
       aria-atomic="true"
@@ -216,11 +216,11 @@
     >
       <div class="toast-body">
         <div class="row">
-          <div class="col text-center">Leads Reloaded.</div>
+          <div class="col text-center toast-body-text"></div>
           <div class="col-2">
             <button
               type="button"
-              class="btn-close btn-close-toast btn-close-white"
+              class="btn-close btn-close-toast"
               data-bs-dismiss="toast"
               aria-label="Close"
             ></button>
@@ -257,82 +257,11 @@
 <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/plug-ins/1.10.12/sorting/datetime-moment.js"></script>
 <script>
+  // Variables
   let models = JSON.parse(`<%- JSON.stringify(models) %>`);
   let chartColors;
   let datatable;
-  let toast;
-  $(document).ready(function () {
-    // Datatable init
-    $.fn.dataTable.moment("M/DD");
-    datatable = $("#leadsTable").DataTable({
-      dom: "Bfrtip",
-      pageLength: 1000,
-
-      buttons: [
-        {
-          text: `<span id="liveToastBtn" class="p-1"><i class="fa fa-arrows-rotate"></i></span>`,
-          action: async function (e, dt, node, config) {
-            data = await dt.ajax.reload();
-            $("#liveToast").toast("show");
-            models = data.context[0].json.data;
-            _initChart();
-          },
-        },
-        "csv",
-      ],
-      ajax: "lead/dataTable",
-      order: [
-        [2, "desc"],
-        [1, "desc"],
-      ],
-      columnDefs: [
-        { orderable: false, targets: 0}
-      ],
-      columns: [
-        {
-          data: null,
-          render: function (data, type, row) {
-            return `
-                <a id="${data._id}" data-bs-toggle="modal" onclick="editModal(event)" data-bs-target=".editModal" href="#" class="link link-edit"><i class="fa fa-money-check-dollar text-success me-2"></i></a>
-                <a id="${data._id}" data-bs-toggle="modal" data-bs-target=".deleteModal" class="link" href="#"><i class="fa fa-trash text-danger"></i></a>
-                `;
-          },
-        },
-        { data: "location" },
-        {
-          data: "date",
-          render: function (data, type, row) {
-            var date = new Date(data);
-            return moment(date).format("M/DD");
-          },
-        },
-        { data: "name" },
-        { data: "email" },
-        {
-          data: "phone",
-          render: function (data, type, row) {
-            return data.replace("-", "");
-          },
-        },
-        { data: "make" },
-        { data: "model" },
-        { data: "issue" },
-        {
-          data: "price",
-          render: function (data, type, row) {
-            if (data == null || data == 0 || data == "0") return "N/A";
-            else return data;
-          },
-        },
-      ],
-    });
-
-    // Datatable error handler
-    $.fn.dataTable.ext.errMode = (settings, helpPage, message) =>
-      console.log(message);
-    _initChartColors();
-    _initChart();
-  });
+  let toast, prevToastStyle;
 
   // Chart setup
   function _initChart() {
@@ -457,12 +386,7 @@
     });
   }
 
-  // Edit modal cancel
-  $(".form-cancel").click((e) => {
-    resetEditModal();
-  });
-
-  // Edit modal show
+  // Edit modal
   function editModal(e) {
     const model = models.find((model) => model._id == e.currentTarget.id);
     $("input[name=id]").val(model._id).removeClass("is-invalid");
@@ -475,8 +399,11 @@
     $("input[name=price]").val(model.price).removeClass("is-invalid");
     $("input[name=converted]").prop("checked", model.converted);
   }
-
-  // Edit modal submit
+  function resetModal() {
+    $(".form-control").val("");
+    $(".form-control").removeClass("is-valid");
+    $(".editModal").modal("hide");
+  }
   $("form").submit(function (e) {
     e.preventDefault();
     e.stopPropagation();
@@ -489,12 +416,13 @@
         });
       } else {
         $(`input.form-control`).addClass("is-valid");
-        alert("Update Lead");
+        setToast('Lead Updated.','success');
         console.log(res);
         resetModal();
       }
     });
   });
+  $(".form-cancel").click((e) => resetEditModal());
 
   // Convert form element data to JSON
   function formJson(form) {
@@ -506,10 +434,84 @@
       }, {});
   }
 
-  // Reset Edit Modal data.
-  function resetModal() {
-    $(".form-control").val("");
-    $(".form-control").removeClass("is-valid");
-    $(".editModal").modal("hide");
+  // Sets toast data and displays
+  function setToast(text, style, delay = 1500) {
+    $(".toast")
+      .removeClass(`text-bg-${prevToastStyle}`)
+      .addClass(`text-bg-${style}`)
+      .attr("data-bs-delay", delay);
+    $(".toast-body-text").html(`${text}`);
+    $("#liveToast").toast("show");
+    prevToastStyle = style;
+
   }
+
+  // Page Load
+  $(document).ready(function () {
+    // Datatable init
+    $.fn.dataTable.moment("M/DD");
+    datatable = $("#leadsTable").DataTable({
+      dom: "Bfrtip",
+      pageLength: 1000,
+      buttons: [
+        {
+          text: `<span id="liveToastBtn" class="p-1"><i class="fa fa-arrows-rotate"></i></span>`,
+          action: async function (e, dt, node, config) {
+            data = await dt.ajax.reload();
+            setToast("Leads Reloaded", "secondary");
+            models = data.context[0].json.data;
+            _initChart();
+          },
+        },
+        "csv",
+      ],
+      ajax: "lead/dataTable",
+      order: [
+        [2, "desc"],
+        [1, "desc"],
+      ],
+      columnDefs: [{ orderable: false, targets: 0 }],
+      columns: [
+        {
+          data: null,
+          render: function (data, type, row) {
+            return `
+                <a id="${data._id}" data-bs-toggle="modal" onclick="editModal(event)" data-bs-target=".editModal" href="#" class="link link-edit"><i class="fa fa-money-check-dollar text-success me-2"></i></a>
+                <a id="${data._id}" data-bs-toggle="modal" data-bs-target=".deleteModal" class="link" href="#"><i class="fa fa-trash text-danger"></i></a>
+                `;
+          },
+        },
+        { data: "location" },
+        {
+          data: "date",
+          render: function (data, type, row) {
+            var date = new Date(data);
+            return moment(date).format("M/DD");
+          },
+        },
+        { data: "name" },
+        { data: "email" },
+        {
+          data: "phone",
+          render: function (data, type, row) {
+            return data.replace("-", "");
+          },
+        },
+        { data: "make" },
+        { data: "model" },
+        { data: "issue" },
+        {
+          data: "price",
+          render: function (data, type, row) {
+            if (data == null || data == 0 || data == "0") return "N/A";
+            else return data;
+          },
+        },
+      ],
+    });
+    $.fn.dataTable.ext.errMode = false;
+    // Chart init
+    _initChartColors();
+    _initChart();
+  });
 </script>
