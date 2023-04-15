@@ -31,10 +31,10 @@
   table {
     width: 100%;
   }
-  .toast{
-    width:12rem !important;
+  .toast {
+    width: 12rem !important;
   }
-  .btn-close-toast{
+  .btn-close-toast {
     position: relative !important;
     right: 1rem !important;
   }
@@ -267,12 +267,13 @@
     datatable = $("#leadsTable").DataTable({
       dom: "Bfrtip",
       pageLength: 1000,
+
       buttons: [
         {
           text: `<span id="liveToastBtn" class="p-1"><i class="fa fa-arrows-rotate"></i></span>`,
           action: async function (e, dt, node, config) {
             data = await dt.ajax.reload();
-            $("#liveToast").toast('show');
+            $("#liveToast").toast("show");
             models = data.context[0].json.data;
             _initChart();
           },
@@ -280,7 +281,13 @@
         "csv",
       ],
       ajax: "lead/dataTable",
-      order: [[2, "desc"]],
+      order: [
+        [2, "desc"],
+        [1, "desc"],
+      ],
+      columnDefs: [
+        { orderable: false, targets: 0}
+      ],
       columns: [
         {
           data: null,
@@ -321,9 +328,8 @@
     });
 
     // Datatable error handler
-    $.fn.dataTable.ext.errMode = function (settings, helpPage, message) {
+    $.fn.dataTable.ext.errMode = (settings, helpPage, message) =>
       console.log(message);
-    };
     _initChartColors();
     _initChart();
   });
@@ -437,7 +443,7 @@
       },
     });
   }
-  function _initChartColors(){
+  function _initChartColors() {
     chartColors = [];
     const byStore_X = models
       .map((model) => model.location)
