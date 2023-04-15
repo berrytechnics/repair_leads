@@ -228,7 +228,14 @@
 
   $(document).ready(function () {
     // Init datatable
-    $("table").DataTable({});
+    $("table").DataTable({
+      columnDefs: [
+        { orderable: false, targets: 0}
+      ],
+      order: [
+        [3, 'asc']
+      ]
+    });
     // New User modal
     $(".newUser").click((e) => {
       resetModal();
