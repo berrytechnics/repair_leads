@@ -21,7 +21,7 @@ router.post(
 );
 
 router.get("/makes/:type", Pricelist.makes);
-router.get("/models/:make", Pricelist.models);
+router.get("/models/:make/:type", Pricelist.models);
 router.get("/repairs/:model", Pricelist.repairs);
 
 export default router;

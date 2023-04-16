@@ -67,9 +67,9 @@ Pricelist.getMakes = async (type) => {
     next(err);
   }
 };
-Pricelist.getModels = async (make) => {
+Pricelist.getModels = async (make, type) => {
   try {
-    return await Pricelist.find({ make: make }).distinct("model");
+    return await Pricelist.find({ type: type, make: make }).distinct("model");
   } catch (err) {
     next(err);
   }

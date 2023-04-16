@@ -273,7 +273,7 @@
   // Get Models
   function getModels(e) {
     formData.make = e.target.innerText;
-    fetch(`/models/${e.target.innerText}`)
+    fetch(`/models/${e.target.innerText}/${formData.type}`)
       .then((res) => res.json())
       .then((models) => {
         $(".card-3-body").html("");

@@ -40,6 +40,7 @@
   }
 </style>
 <html>
+  <!-- BODY  -->
   <div class="container-fluid">
     <div class="row mt-3 component-leads-header">
       <div class="col">
@@ -450,6 +451,7 @@
   $(document).ready(function () {
     // Datatable init
     $.fn.dataTable.moment("M/DD");
+    $.fn.dataTable.ext.errMode = false;
     datatable = $("#leadsTable").DataTable({
       dom: "Bfrtip",
       pageLength: 1000,
@@ -509,7 +511,6 @@
         },
       ],
     });
-    $.fn.dataTable.ext.errMode = false;
     // Chart init
     _initChartColors();
     _initChart();

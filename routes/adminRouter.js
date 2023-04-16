@@ -13,8 +13,8 @@ router.get("/password-reset", User.renderPasswordReset);
 
 router.all("/pricelist", Pricelist.index);
 router.all("/pricelist/create", Pricelist.create);
-router.all("/pricelist/view/:id", Pricelist.view);
-router.all("/pricelist/update/:id", Pricelist.update);
+router.all("/pricelist/view", Pricelist.view);
+router.all("/pricelist/edit", Pricelist.update);
 
 router.get("/location", Location.index);
 

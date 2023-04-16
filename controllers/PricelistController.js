@@ -17,7 +17,7 @@ export const index = async (req, res, next) => {
  */
 export const view = async (req, res, next) => {
   try {
-    const model = await Pricelist.find({ id: req.params.id });
+    const model = await Pricelist.find({ id: req.query.id });
     res.render("pricelist/view", { model: model });
   } catch (err) {
     next(err);
@@ -35,7 +35,7 @@ export const update = async (req, res, next) => {
       });
       res.render("pricelist/view", { model: model });
     }
-    const model = await Pricelist.findById(req.params.id);
+    const model = await Pricelist.findById(req.query.id);
     res.render("pricelist/update", { model: model });
   } catch (err) {
     next(err);
@@ -87,7 +87,7 @@ export const makes = async (req, res, next) => {
  */
 export const models = async (req, res, next) => {
   try {
-    res.send(await Pricelist.getModels(req.params.make));
+    res.send(await Pricelist.getModels(req.params.make,req.params.type));
   } catch (err) {
     next(err);
   }
